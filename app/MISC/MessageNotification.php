@@ -8,7 +8,7 @@ use Twilio\Rest\Client;
 class MessageNotification{
     public function _construct(){}
 
-    public function sendMessage($receiver, $message){
+    public function sendMessage($receiver, $message, $merchant_phone){
         /*$this->validate($request, [
             'receiver' => 'required|max:15',
             'message' => 'required|min:5|max:155',

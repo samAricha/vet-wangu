@@ -12,14 +12,16 @@ class Vet{
     private $text;
     private $level;
     private $ussd_string_exploded;
+    private $phone_number;
     
 
     private $response = 'Sorry the app is not working currently, our engineers are working 
     on the problem. We sincerely apologize';
 
-    public function __construct($text, $level, $ussd_string_exploded){
+    public function __construct($text, $level, $ussd_string_exploded, $phone_number){
         $this->text = $text;
         $this->level = $level;
+        $this->phone_number = $phone_number;
         $this->ussd_string_exploded = $ussd_string_exploded;
     }
   
@@ -78,8 +80,9 @@ class Vet{
         }elseif($this->level == 5){
             $this->availableVets();
         }elseif($this->level = 6){
+            $this->response = "END You will be contacted by your Vet... \n";
             $message = new MessageNotification();
-            $message->sendMessage("+254708392326", "hii");
+            $message->sendMessage("+254708392326", "$this->phone_number requests your services");
         }        
     }
 
@@ -100,8 +103,9 @@ class Vet{
         }elseif($this->level == 5){
             $this->availableVets();
         }elseif($this->level == 6){
+            $this->response = "END You will be contacted by the nearest Vetenary... \n";
             $message = new MessageNotification();
-            $message->sendMessage("+254708392326", "hii");
+            $message->sendMessage("+254708392326", "$this->phone_number requests your services");
         }
          
     }
@@ -123,8 +127,9 @@ class Vet{
         }elseif($this->level == 5){
             $this->availableVetShops();
         }elseif($this->level == 6){
+            $this->response = "END You will be contacted by the nearest VetShop... \n";
             $message = new MessageNotification();
-            $message->sendMessage("+254708392326", "hii");
+            $message->sendMessage("+254708392326", "$this->phone_number requests your services");
         }
     }
 

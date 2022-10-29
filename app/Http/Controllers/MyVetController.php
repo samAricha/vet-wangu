@@ -16,7 +16,7 @@ class MyVetController extends Controller
         $ussd_string_exploded = explode("*", $text);// use explode to split the string text response from Africa's talking gateway into an array.
         $level = count($ussd_string_exploded);// Get ussd menu level number from the gateway
 
-        $vet = new Vet($text,$level, $ussd_string_exploded);
+        $vet = new Vet($text,$level, $ussd_string_exploded, $phoneNumber);
         $response = $vet->display();
         echo $response;
     }
