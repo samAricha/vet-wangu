@@ -3,6 +3,7 @@ namespace App\MISC;
 
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\MISC\MessageNotification;
 
 require ('../vendor/autoload.php');
 
@@ -40,7 +41,8 @@ class Vet{
         }elseif ($this->text == "22") {
             $this->displayWards(2, 1);
         }elseif ($this->text == "44") {
-            $this->response = $this->ussd_string_exploded[0];
+            $message = new MessageNotification();
+            $message->sendMessage("+254708392326", "hii");
         }else{
         $this->response = "END please select a viable number";
         }
@@ -74,10 +76,11 @@ class Vet{
         }elseif($this->level == 4){
             $this->displayWards($this->ussd_string_exploded[2], $this->ussd_string_exploded[3]);
         }elseif($this->level == 5){
-            $this->availableVets();;
-        }
-        
-         
+            $this->availableVets();
+        }elseif($this->level = 6){
+            $message = new MessageNotification();
+            $message->sendMessage("+254708392326", "hii");
+        }        
     }
 
     function requestVet(){
@@ -96,6 +99,9 @@ class Vet{
             $this->displayWards($this->ussd_string_exploded[2], $this->ussd_string_exploded[3]);
         }elseif($this->level == 5){
             $this->availableVets();
+        }elseif($this->level == 6){
+            $message = new MessageNotification();
+            $message->sendMessage("+254708392326", "hii");
         }
          
     }
@@ -116,6 +122,9 @@ class Vet{
             $this->displayWards($this->ussd_string_exploded[2], $this->ussd_string_exploded[3]);
         }elseif($this->level == 5){
             $this->availableVetShops();
+        }elseif($this->level == 6){
+            $message = new MessageNotification();
+            $message->sendMessage("+254708392326", "hii");
         }
     }
 
