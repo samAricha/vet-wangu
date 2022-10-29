@@ -24,23 +24,23 @@ class Vet{
   
     public function display(){
         if ($this->text == "") {
-            // first response when a user dials ussd code
-            $this->response  = "CON Welcome to VetWangu/Mkulima Mjanja\n";
-            $this->response .= "1. Personal Vet \n";
-            $this->response .= "2. Request Vet \n";
-            $this->response .= "3. Buy Products \n";
-            $this->response .= "4. About VetWangu \n";
-        }elseif ($this->level == 1) {
+           $this->opening();
+        }elseif ($this->ussd_string_exploded[0] == 1) {
             $this->personalVet();
-        }elseif ($this->text == "2") {
+        }elseif ($this->ussd_string_exploded[0] == 2) {
             $this->requestVet();
-        }elseif ($this->text == "3") {
+        }elseif ($this->ussd_string_exploded[0] == 3) {
             $this->vetShop();
         }elseif ($this->text == "4") {
             $this->response = "END Tunahakikisha wewe kama Mkulima Mjanja unaendeleza Kilimo Biashara bila Noma.";
+        }elseif ($this->text == "98") {
+            $this->opening();
+        }elseif ($this->text == "00") {
+            $this->opening();
         }elseif ($this->text == "22") {
-            $variable = $this->ussd_string_exploded[0];
-            $this->response = "testing:$variable";
+            $this->displayWards(2, 1);
+        }elseif ($this->text == "44") {
+            $this->response = $this->ussd_string_exploded[0];
         }else{
         $this->response = "END please select a viable number";
         }
@@ -50,30 +50,137 @@ class Vet{
         return $this->response;
     }
 
+    function opening(){
+        // first response when a user dials ussd code
+        $this->response  = "CON Welcome to VetWangu/Mkulima Mjanja\n";
+        $this->response .= "1. Personal Vet \n";
+        $this->response .= "2. Request Vet \n";
+        $this->response .= "3. Buy Products \n";
+        $this->response .= "4. About VetWangu \n";
+    }
+
     function personalVet(){
-        $this->response = "CON Please select a service... \n";
-        $this->response .= "1. Urgent Service \n";
-        $this->response .= "2. Book Appointment \n\n";
-        $this->response .= "98. Back \n";
-        $this->response .= "00. Main \n";
+        if($this->level == 1){
+            $this->response = "CON Personal Vet Services... \n";
+            $this->response .= "1. Urgent Service \n";
+            $this->response .= "2. Book Appointment \n";
+            $this->response .= "3. Consultation from Vet \n\n";
+            $this->response .= "98. Back \n";
+            $this->response .= "00. Main \n";
+        }elseif($this->level == 2){
+            $this->displayCounties();
+        }elseif($this->level == 3){
+            $this->displayConstituencies($this->ussd_string_exploded[2]);
+        }elseif($this->level == 4){
+            $this->displayWards($this->ussd_string_exploded[2], $this->ussd_string_exploded[3]);
+        }elseif($this->level == 5){
+            $this->availableVets();;
+        }
+        
          
     }
 
     function requestVet(){
-        $this->response = "CON Please select a service... \n";
-        $this->response .= "1. Body Check \n";
-        $this->response .= "2. Specific Request \n\n";
-        $this->response .= "98. Back \n";
-        $this->response .= "00. Main \n";
+        if($this->level == 1){
+            $this->response = "CON Please select a service... \n";
+            $this->response .= "1. Urgent Service \n";
+            $this->response .= "2. Book Appointment \n";
+            $this->response .= "3. Consultation from Vet \n\n";
+            $this->response .= "98. Back \n";
+            $this->response .= "00. Main \n";
+        }elseif($this->level == 2){
+            $this->displayCounties();
+        }elseif($this->level == 3){
+            $this->displayConstituencies($this->ussd_string_exploded[2]);
+        }elseif($this->level == 4){
+            $this->displayWards($this->ussd_string_exploded[2], $this->ussd_string_exploded[3]);
+        }elseif($this->level == 5){
+            $this->availableVets();
+        }
          
     }
 
     function vetShop(){
-        $this->response = "CON Please select a service... \n";
-        $this->response .= "1. Buy Medication \n";
-        $this->response .= "2. Call Vet Shop \n\n";
-        $this->response .= "98. Back \n";
-        $this->response .= "00. Main \n";       
+        if($this->level == 1){
+            $this->response = "CON Please select a product... \n";
+            $this->response .= "1. Fertiliser \n";
+            $this->response .= "1. Seeds \n";
+            $this->response .= "2. Medicine \n\n";
+            $this->response .= "98. Back \n";
+            $this->response .= "00. Main \n";
+        }elseif($this->level == 2){
+            $this->displayCounties();
+        }elseif($this->level == 3){
+            $this->displayConstituencies($this->ussd_string_exploded[2]);
+        }elseif($this->level == 4){
+            $this->displayWards($this->ussd_string_exploded[2], $this->ussd_string_exploded[3]);
+        }elseif($this->level == 5){
+            $this->availableVetShops();
+        }
+    }
+
+    function availableVetShops(){
+        $this->response = "CON Available Vet Shops... \n";
+        $county = $this->ussd_string_exploded[2];
+        $constituency = $this->ussd_string_exploded[3];
+        $ward = $this->ussd_string_exploded[4];
+        $results = DB::select("SELECT * FROM vet_shops WHERE county= $county and constituency=$constituency )");
+        
+        $i = 0;
+        foreach($results as $result){
+            $i++; 
+            $this->response .= $i.". ".$result -> name. "\n";
+        }
+
+    }
+
+    function availableVets(){
+        $this->response = "CON Available Vets... \n";
+        $county = $this->ussd_string_exploded[2];
+        $constituency = $this->ussd_string_exploded[3];
+        $ward = $this->ussd_string_exploded[4];
+        $results = DB::select("SELECT * FROM vets WHERE county= $county AND constituency=$constituency");
+        
+        $i = 0;
+        foreach($results as $result){
+            $i++; 
+            $this->response .= $i.". ".$result -> name. "\n";
+        }
+    }
+
+
+
+    function displayCounties(){
+        $this->response = "CON Please choose your county... \n";
+        $results = DB::select("SELECT * FROM counties");
+        
+        $i = 0;
+        foreach($results as $result){
+            $i++; 
+            $this->response .= $i.". ".$result -> name. "\n";
+        }  
+
+    }
+    function displayConstituencies($countyId){
+        $this->response = "CON Please choose your Constituency? \n";
+        $results = DB::select("SELECT * FROM constituencies WHERE county = $countyId");
+
+        $i = 0;
+        foreach($results as $result){
+            $i++; 
+            $this->response .= $i.". ".$result -> name. "\n";
+        }   
+    }
+    function displayWards($countyId, $constituencyId){
+        $this->response = "CON Please choose your Ward? \n";
+        $results = DB::select("SELECT * FROM wards WHERE  county_no = $countyId and constituency_no = $constituencyId");
+
+        $i = 0;
+        foreach($results as $result){
+            $i++; 
+            $this->response .= $i.". ".$result -> name. "\n";
+        }    
+
     }
 
 
