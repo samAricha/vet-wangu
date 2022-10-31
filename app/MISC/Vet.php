@@ -56,11 +56,11 @@ class Vet{
 
     function opening(){
         // first response when a user dials ussd code
-        $this->response  = "CON Welcome to VetWangu/Mkulima Mjanja\n";
+        $this->response  = "CON Welcome to VetCare/Mkulima Mjanja\n";
         $this->response .= "1. Personal Vet \n";
         $this->response .= "2. Request Vet \n";
         $this->response .= "3. Buy Products \n";
-        $this->response .= "4. About VetWangu \n";
+        $this->response .= "4. About VetCare \n";
     }
 
     function personalVet(){
