@@ -101,6 +101,9 @@ class Vet{
         }elseif($this->level == 4){
             $this->displayWards($this->ussd_string_exploded[2], $this->ussd_string_exploded[3]);
         }elseif($this->level == 5){
+            $this->response = "END You will be contacted by the nearest Vetenary... \n";
+            $message = new MessageNotification();
+            $message->sendMessage("+254708392326", "$this->phone_number requests your services");
             $this->availableVets();
         }elseif($this->level == 6){
             $this->response = "END You will be contacted by the nearest Vetenary... \n";
@@ -134,7 +137,7 @@ class Vet{
     }
 
     function availableVetShops(){
-        $this->response = "CON Available Vet Shops... \n";
+        $this->response = "END Available Vet Shops will contact you... \n";
         $county = $this->ussd_string_exploded[2];
         $constituency = $this->ussd_string_exploded[3];
         $ward = $this->ussd_string_exploded[4];
@@ -145,11 +148,13 @@ class Vet{
             $i++; 
             $this->response .= $i.". ".$result -> name. "\n";
         }
+        $message = new MessageNotification();
+        $message->sendMessage("+254708392326", "$this->phone_number requests your services");
 
     }
 
     function availableVets(){
-        $this->response = "CON Available Vets... \n";
+        $this->response = "END Available Vet will contact you... \n";
         $county = $this->ussd_string_exploded[2];
         $constituency = $this->ussd_string_exploded[3];
         $ward = $this->ussd_string_exploded[4];
@@ -160,6 +165,8 @@ class Vet{
             $i++; 
             $this->response .= $i.". ".$result -> name. "\n";
         }
+        $message = new MessageNotification();
+        $message->sendMessage("+254708392326", "$this->phone_number requests your services");
     }
 
 
