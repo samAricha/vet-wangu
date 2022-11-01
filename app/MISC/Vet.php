@@ -78,6 +78,7 @@ class Vet{
         }elseif($this->level == 4){
             $this->displayWards($this->ussd_string_exploded[2], $this->ussd_string_exploded[3]);
         }elseif($this->level == 5){
+            //$this->response  = "CON hello";
             $this->availableVets();
         }elseif($this->level = 6){
             $this->response = "END You will be contacted by your Vet... \n";
@@ -101,9 +102,7 @@ class Vet{
         }elseif($this->level == 4){
             $this->displayWards($this->ussd_string_exploded[2], $this->ussd_string_exploded[3]);
         }elseif($this->level == 5){
-            $this->response = "END You will be contacted by the nearest Vetenary... \n";
-            $message = new MessageNotification();
-            $message->sendMessage("+254708392326", "$this->phone_number requests your services");
+            //$this->response = "END You will be contacted by the nearest Vetenary... \n";
             $this->availableVets();
         }elseif($this->level == 6){
             $this->response = "END You will be contacted by the nearest Vetenary... \n";
@@ -141,7 +140,7 @@ class Vet{
         $county = $this->ussd_string_exploded[2];
         $constituency = $this->ussd_string_exploded[3];
         $ward = $this->ussd_string_exploded[4];
-        $results = DB::select("SELECT * FROM vet_shops WHERE county= $county and constituency=$constituency )");
+        $results = DB::select('SELECT * FROM vet_shops WHERE county= ? and constituency=?',[$county, $constituency]);
         
         $i = 0;
         foreach($results as $result){
@@ -159,7 +158,7 @@ class Vet{
         $constituency = $this->ussd_string_exploded[3];
         $ward = $this->ussd_string_exploded[4];
         $results = DB::select("SELECT * FROM vets WHERE county= $county AND constituency=$constituency");
-        
+
         $i = 0;
         foreach($results as $result){
             $i++; 
