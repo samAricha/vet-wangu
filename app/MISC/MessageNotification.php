@@ -9,10 +9,10 @@ class MessageNotification{
     public function _construct(){}
 
     public function sendMessage($receiver, $message){
-        $this->validate($request, [
+       /* $this->validate($request, [
             'receiver' => 'required|max:15',
             'message' => 'required|min:5|max:155',
-        ]);
+        ]);*/
  
         try {
             $accountSid = getenv("TWILIO_SID");
