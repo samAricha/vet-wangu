@@ -15,9 +15,10 @@ class MessageNotification{
         ]);*/
  
         try {
-            $accountSid = getenv("TWILIO_SID");
-            $authToken = getenv("TWILIO_TOKEN");
-            $twilioNumber = getenv("TWILIO_FROM");
+            $accountSid = "AC36ea970d2097c40faaf519ebca5cf08f";
+            $authToken = "9d17834848107992ddf84981f1cc7376";
+            $twilioNumber = "+19257095410";
+            
  
             $client = new Client($accountSid, $authToken);
  
@@ -29,7 +30,7 @@ class MessageNotification{
             return back()
             ->with('success','Sms has been successfully sent.');
  
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             return back()
             ->with('error', $e->getMessage());
