@@ -148,7 +148,7 @@ class Vet{
             $this->response .= $i.". ".$result -> name. "\n";
         }
         $message = new MessageNotification();
-        $message->sendMessage("+254708392326", "$this->phone_number requests your services");
+        $message->sendMessage("+254702051788", "$this->phone_number requests your services");
 
     }
 
@@ -165,7 +165,7 @@ class Vet{
             $this->response .= $i.". ".$result -> name. "\n";
         }
         $message = new MessageNotification();
-        $message->sendMessage("+254708392326", "$this->phone_number requests your services");
+        $message->sendMessage("+254702051788", "$this->phone_number requests your services");
     }
 
 
